@@ -1,0 +1,469 @@
+openapi: 3.0.3
+info:
+  title: Hestia - Sistema de Reserva de Hotel
+  description: |
+    API do sistema Hestia para gerenciamento de reservas de hotel.
+    Esta especificação cobre o CRUD de hóspedes conforme requisitos de ES3.
+  version: 1.0.0
+  contact:
+    name: Equipe Hestia
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Ambiente local
+  - url: https://api.hestia.com/v1
+    description: Produção
+
+tags:
+  - name: Auth
+    description: Autenticação
+  - name: Hóspedes
+    description: Gestão de hóspedes (RF0101, RF0102, RF0103, RF0104)
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Autenticar hóspede
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              cpf: "123.456.789-00"
+              senha: "minhasenha123"
+      responses:
+        '200':
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: "eyJhbGciOiJIUzI1NiJ9..."
+                tipo: "Bearer"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /hospedes:
+    post:
+      tags:
+        - Hóspedes
+      summary: Cadastrar hóspede (RF0101)
+      description: |
+        Cadastra um novo hóspede no sistema.
+        Regras aplicadas: RN0201, RN0202, RN0211.
+        Senha é armazenada com hash e salt (RNF0112).
+      operationId: cadastrarHospede
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CadastrarHospedeRequest'
+            example:
+              nome: "João da Silva"
+              cpf: "123.456.789-00"
+              dtNascimento: "1990-05-15"
+              email: "joao.silva@email.com"
+              senha: "minhasenha123"
+              aceitouTermos: true
+              telefone:
+                ddd: "11"
+                numero: "987654321"
+              endereco:
+                logradouro: "Rua das Flores"
+                numero: "123"
+                complemento: "Apto 45"
+                bairro: "Centro"
+                cep: "08710-000"
+                cidade: "Mogi das Cruzes"
+                estado: "SP"
+      responses:
+        '201':
+          description: Hóspede cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospedeResponse'
+        '409':
+          description: CPF já cadastrado (RN0202)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErroResponse'
+              example:
+                status: 409
+                erro: "Conflito"
+                mensagem: "CPF já cadastrado no sistema."
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /hospedes/me:
+    get:
+      tags:
+        - Hóspedes
+      summary: Consultar próprio perfil (RF0104)
+      description: Retorna os dados do hóspede autenticado.
+      operationId: consultarPerfil
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dados do hóspede
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospedeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Hóspedes
+      summary: Alterar dados do hóspede (RF0102)
+      description: |
+        Altera dados cadastrais do hóspede autenticado.
+        CPF não pode ser alterado (RN0202).
+        Regras aplicadas: RN0201, RN0211.
+      operationId: alterarHospede
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlterarHospedeRequest'
+            example:
+              nome: "João da Silva Santos"
+              dtNascimento: "1990-05-15"
+              email: "joao.santos@email.com"
+              telefone:
+                ddd: "11"
+                numero: "912345678"
+              endereco:
+                logradouro: "Av. Paulista"
+                numero: "1000"
+                complemento: "Sala 10"
+                bairro: "Bela Vista"
+                cep: "01310-100"
+                cidade: "São Paulo"
+                estado: "SP"
+      responses:
+        '200':
+          description: Dados alterados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HospedeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /hospedes/me/inativar:
+    patch:
+      tags:
+        - Hóspedes
+      summary: Inativar conta do hóspede (RF0103)
+      description: |
+        Realiza soft delete da conta do hóspede autenticado.
+        Operação irreversível pelo próprio hóspede.
+      operationId: inativarHospede
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Conta inativada com sucesso
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Token ausente ou inválido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErroResponse'
+          example:
+            status: 401
+            erro: "Não autorizado"
+            mensagem: "Token JWT ausente ou inválido."
+
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErroResponse'
+          example:
+            status: 404
+            erro: "Não encontrado"
+            mensagem: "Hóspede não encontrado."
+
+    UnprocessableEntity:
+      description: Dados inválidos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErroValidacaoResponse'
+          example:
+            status: 422
+            erro: "Dados inválidos"
+            mensagem: "Um ou mais campos estão inválidos."
+            campos:
+              - campo: "email"
+                mensagem: "E-mail em formato inválido."
+              - campo: "cpf"
+                mensagem: "CPF inválido."
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - cpf
+        - senha
+      properties:
+        cpf:
+          type: string
+          description: CPF do hóspede
+          example: "123.456.789-00"
+        senha:
+          type: string
+          format: password
+          description: Senha do hóspede
+          example: "minhasenha123"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT
+        tipo:
+          type: string
+          example: "Bearer"
+
+    TelefoneRequest:
+      type: object
+      required:
+        - ddd
+        - numero
+      properties:
+        ddd:
+          type: string
+          example: "11"
+        numero:
+          type: string
+          example: "987654321"
+
+    EnderecoRequest:
+      type: object
+      required:
+        - logradouro
+        - numero
+        - bairro
+        - cep
+        - cidade
+        - estado
+      properties:
+        logradouro:
+          type: string
+          example: "Rua das Flores"
+        numero:
+          type: string
+          example: "123"
+        complemento:
+          type: string
+          example: "Apto 45"
+        bairro:
+          type: string
+          example: "Centro"
+        cep:
+          type: string
+          example: "08710-000"
+        cidade:
+          type: string
+          example: "Mogi das Cruzes"
+        estado:
+          type: string
+          example: "SP"
+
+    CadastrarHospedeRequest:
+      type: object
+      required:
+        - nome
+        - cpf
+        - dtNascimento
+        - email
+        - senha
+        - aceitouTermos
+        - telefone
+        - endereco
+      properties:
+        nome:
+          type: string
+          example: "João da Silva"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        dtNascimento:
+          type: string
+          format: date
+          example: "1990-05-15"
+        email:
+          type: string
+          format: email
+          example: "joao.silva@email.com"
+        senha:
+          type: string
+          format: password
+          minLength: 8
+          example: "minhasenha123"
+        aceitouTermos:
+          type: boolean
+          example: true
+        telefone:
+          $ref: '#/components/schemas/TelefoneRequest'
+        endereco:
+          $ref: '#/components/schemas/EnderecoRequest'
+
+    AlterarHospedeRequest:
+      type: object
+      required:
+        - nome
+        - dtNascimento
+        - email
+        - telefone
+        - endereco
+      properties:
+        nome:
+          type: string
+          example: "João da Silva Santos"
+        dtNascimento:
+          type: string
+          format: date
+          example: "1990-05-15"
+        email:
+          type: string
+          format: email
+          example: "joao.santos@email.com"
+        telefone:
+          $ref: '#/components/schemas/TelefoneRequest'
+        endereco:
+          $ref: '#/components/schemas/EnderecoRequest'
+
+    TelefoneResponse:
+      type: object
+      properties:
+        ddd:
+          type: string
+          example: "11"
+        numero:
+          type: string
+          example: "987654321"
+
+    EnderecoResponse:
+      type: object
+      properties:
+        logradouro:
+          type: string
+        numero:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cep:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+
+    HospedeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: "João da Silva"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        dtNascimento:
+          type: string
+          format: date
+          example: "1990-05-15"
+        email:
+          type: string
+          example: "joao.silva@email.com"
+        ativo:
+          type: boolean
+          example: true
+        aceitouTermos:
+          type: boolean
+          example: true
+        telefone:
+          $ref: '#/components/schemas/TelefoneResponse'
+        endereco:
+          $ref: '#/components/schemas/EnderecoResponse'
+        dtCadastro:
+          type: string
+          format: date-time
+          example: "2026-06-14T10:00:00"
+        dtAlteracao:
+          type: string
+          format: date-time
+          example: "2026-06-14T10:00:00"
+
+    ErroResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        erro:
+          type: string
+        mensagem:
+          type: string
+
+    ErroValidacaoResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        erro:
+          type: string
+        mensagem:
+          type: string
+        campos:
+          type: array
+          items:
+            type: object
+            properties:
+              campo:
+                type: string
+              mensagem:
+                type: string
