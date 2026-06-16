@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__content footer__content--main">
-        <Logo headingLevel={2} />
+        <Logo />
         <p className="footer__content-text">
           Uma experiência de hotel boutique que une serviço de alto padrão e
           calor humano.

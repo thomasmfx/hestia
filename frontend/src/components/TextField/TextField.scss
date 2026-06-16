@@ -1,0 +1,54 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.text-field {
+  display: block;
+  margin-bottom: $space-md;
+}
+
+.text-field__label {
+  @include font-label;
+  display: block;
+  color: $color-text-secondary;
+  margin-bottom: $space-xs;
+}
+
+.text-field__control {
+  position: relative;
+
+  &--trailing .text-field__input {
+    padding-right: 44px;
+  }
+}
+
+.text-field__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 $space-md;
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  color: $color-text-primary;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition: border-color $transition-base;
+
+  &::placeholder {
+    color: $color-text-secondary;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+.text-field__trailing {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}

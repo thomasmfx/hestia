@@ -1,16 +1,12 @@
-import type { JSX } from 'react/jsx-runtime';
+import { Link } from 'react-router-dom';
 import './Logo.scss';
 
-interface LogoProps {
-  headingLevel?: number;
-}
-
-export default function Logo({ headingLevel = 1 }: LogoProps) {
-  const HeadingTag = `h${headingLevel}` as keyof JSX.IntrinsicElements;
-
+export default function Logo() {
   return (
     <div>
-      <HeadingTag className="logo">Hestia</HeadingTag>
+      <Link className="logo" to="/">
+        Hestia
+      </Link>
     </div>
   );
 }

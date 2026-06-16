@@ -14,8 +14,15 @@
   font-weight: 600;
 }
 
+.input-date__control {
+  position: relative;
+  width: fit-content;
+}
+
 .input-date__input {
+  field-sizing: content; // encolhe o campo até o texto da data (Chromium 123+)
   padding: 0.5em;
+  padding-right: 30px;
   border: 1px solid $color-border;
   border-radius: $radius-md;
   font-size: $fs-body-m;
@@ -28,5 +35,25 @@
   &::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
+  }
+}
+
+.input-date__icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-text-primary;
   }
 }

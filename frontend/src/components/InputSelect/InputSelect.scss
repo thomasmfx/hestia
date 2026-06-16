@@ -14,19 +14,29 @@
   font-weight: 600;
 }
 
+.input-select__control {
+  position: relative;
+}
+
 .input-select__input {
+  width: 100%;
   padding: 0.5em;
+  padding-right: 38px;
   border: 1px solid $color-border;
   border-radius: $radius-md;
   font-size: $fs-body-m;
   height: 45px;
+  background-color: $color-white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
 
-  &::-webkit-datetime-edit {
-    color: $color-text-secondary;
-  }
-
-  &::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-  }
+.input-select__chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $color-text-secondary;
+  pointer-events: none;
 }

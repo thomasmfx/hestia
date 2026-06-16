@@ -50,6 +50,26 @@
   }
 }
 
+// ─── Transição de página (fade-in ao trocar de rota) ─────
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-transition {
+  animation: pageFadeIn 300ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
+}
+
 // ─── Utilitários gerais ──────────────────────────────────
 .surface {
   background-color: $color-surface;

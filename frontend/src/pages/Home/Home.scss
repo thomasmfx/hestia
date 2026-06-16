@@ -2,7 +2,7 @@
 @use '../../styles/typography';
 
 .main {
-  height: 95dvh;
+  height: calc(100dvh - 72px); // viewport menos o header global
   width: 100%;
 }
 
