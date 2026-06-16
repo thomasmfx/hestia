@@ -1,0 +1,49 @@
+// ─── Colors ───────────────────────────────────────────────────────────────────
+$color-primary: #c0392b;
+$color-primary-dark: #a93226;
+$color-hover-tint: #fdecea;
+
+$color-text-primary: #1a1a1a;
+$color-text-secondary: #6b6b6b;
+
+$color-surface: #f7f4f2;
+$color-border: #e8e2de;
+$color-white: #ffffff;
+
+$color-success: #2d6a4f;
+$color-warning: #b7791f;
+$color-error: #c0392b;
+$color-info: #2b6cb0;
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+$font-display: 'Montserrat', sans-serif;
+$font-body: 'Plus Jakarta Sans', sans-serif;
+
+$fs-display: 48px;
+$fs-h1: 36px;
+$fs-h2: 28px;
+$fs-h3: 22px;
+$fs-body-l: 16px;
+$fs-body-m: 14px;
+$fs-caption: 12px;
+$fs-label: 12px;
+
+// ─── Spacing ──────────────────────────────────────────────────────────────────
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+
+// ─── Border radius ────────────────────────────────────────────────────────────
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;
+
+// ─── Shadows ──────────────────────────────────────────────────────────────────
+$shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+// ─── Transitions ──────────────────────────────────────────────────────────────
+$transition-fast: 150ms ease;
+$transition-base: 200ms ease;

@@ -1,0 +1,76 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+body {
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  font-weight: 400;
+  line-height: 1.6;
+  color: $color-text-primary;
+}
+
+.display {
+  @include font-display;
+}
+h1,
+.h1 {
+  @include font-h1;
+}
+h2,
+.h2 {
+  @include font-h2;
+}
+h3,
+.h3 {
+  @include font-h3;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-display;
+  color: $color-text-primary;
+}
+
+p {
+  font-size: $fs-body-l;
+  color: $color-text-primary;
+}
+
+.text-body-m {
+  font-size: $fs-body-m;
+  line-height: 1.5;
+}
+
+small,
+.text-caption {
+  font-size: $fs-caption;
+  color: $color-text-secondary;
+  line-height: 1.4;
+}
+
+.text-label {
+  @include font-label;
+}
+
+.text-secondary {
+  color: $color-text-secondary;
+}
+.text-primary-brand {
+  color: $color-primary;
+}
+.text-success {
+  color: $color-success;
+}
+.text-warning {
+  color: $color-warning;
+}
+.text-error {
+  color: $color-error;
+}
+.text-info {
+  color: $color-info;
+}
