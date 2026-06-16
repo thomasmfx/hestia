@@ -1,0 +1,32 @@
+@use '../../styles/variables' as *;
+
+.input-select {
+  display: flex;
+  gap: 7px;
+  flex-direction: column;
+}
+
+.input-select__label {
+  text-transform: uppercase;
+  font-size: $fs-label;
+  font-family: $font-body;
+  color: $color-text-secondary;
+  font-weight: 600;
+}
+
+.input-select__input {
+  padding: 0.5em;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  font-size: $fs-body-m;
+  height: 45px;
+
+  &::-webkit-datetime-edit {
+    color: $color-text-secondary;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+}

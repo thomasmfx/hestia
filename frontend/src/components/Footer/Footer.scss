@@ -1,0 +1,49 @@
+@use '../../styles/variables' as *;
+
+.footer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 5em;
+  padding: 64px;
+  background-color: #f7f4f2;
+}
+
+.footer__content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 12px;
+
+  &--main {
+    gap: 14px;
+  }
+}
+
+.footer__content h3 {
+  font-weight: 600;
+  font-size: 14px;
+  color: $color-text-secondary;
+}
+
+.footer__content-text {
+  font-size: 14px;
+  text-decoration: none;
+  color: $color-text-primary;
+}
+
+.footer__content-link {
+  font-size: 14px;
+  text-decoration: none;
+  color: $color-text-primary;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.footer__content-opaque {
+  font-size: 13px;
+  font-weight: 400;
+  color: $color-text-secondary;
+}

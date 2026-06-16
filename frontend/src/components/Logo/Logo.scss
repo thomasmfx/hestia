@@ -1,0 +1,9 @@
+@use '../../styles/variables' as *;
+
+.logo {
+  font-family: $font-display;
+  color: $color-primary;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 26px;
+}

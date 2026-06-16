@@ -1,0 +1,30 @@
+@use '../../styles/variables' as *;
+
+.header {
+  padding: 14px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.header__nav-link {
+  line-height: 1;
+  font-weight: 600;
+  text-decoration: none;
+  color: black;
+  transition: color 200ms ease;
+
+  &:hover {
+    color: $color-primary;
+  }
+
+  &--active {
+    color: $color-primary;
+  }
+}

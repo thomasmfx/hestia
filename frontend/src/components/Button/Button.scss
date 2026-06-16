@@ -1,0 +1,30 @@
+@use '../../styles/variables' as *;
+
+.button {
+  padding: 10px 30px;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  height: 45px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+
+  &--primary {
+    background-color: $color-primary;
+    color: white;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+
+  &--secondary {
+    background-color: $color-primary-dark;
+    color: white;
+  }
+}
