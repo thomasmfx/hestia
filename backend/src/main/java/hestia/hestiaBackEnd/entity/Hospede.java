@@ -30,6 +30,9 @@ public class Hospede {
     @Column(nullable = false)
     LocalDate dataNascimento;
 
+    @Column(nullable = false, length = 2)
+    String ddd;
+
     @Column(nullable = false, length = 15)
     String telefone;
 
