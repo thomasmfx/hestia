@@ -1,5 +1,8 @@
 package hestia.hestiaBackEnd.service;
 
+import hestia.hestiaBackEnd.dto.LoginRequest;
+import hestia.hestiaBackEnd.dto.LoginResponse;
+import hestia.hestiaBackEnd.service.JwtService;
 import hestia.hestiaBackEnd.dto.CadastrarHospedeRequest;
 import hestia.hestiaBackEnd.dto.EnderecoResponse;
 import hestia.hestiaBackEnd.dto.HospedeResponse;
@@ -18,10 +21,12 @@ import java.time.LocalDateTime;
 public class HospedeService {
     private final HospedeRepository hospedeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtService jwtService;
 
-    public HospedeService(HospedeRepository hospedeRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public HospedeService(HospedeRepository hospedeRepository, BCryptPasswordEncoder bCryptPasswordEncoder, JwtService jwtService) {
         this.hospedeRepository = hospedeRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtService = jwtService;
     }
 
     public HospedeResponse cadastrar(CadastrarHospedeRequest cadastrarHospedeRequest){
@@ -79,5 +84,17 @@ public class HospedeService {
                 telefoneResponse,
                 enderecoResponse
         );
+    }
+
+    public LoginResponse login(LoginRequest loginRequest) {
+        Hospede hospede = hospedeRepository.findByCpf(loginRequest.getCpf())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "CPF ou senha inválidos."));
+
+        if (!bCryptPasswordEncoder.matches(loginRequest.getSenha(), hospede.getSenha())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "CPF ou senha inválidos.");
+        }
+
+        String token = jwtService.gerarToken(hospede);
+        return new LoginResponse(token, "Bearer");
     }
 }

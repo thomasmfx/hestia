@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: f0e545c2-10f9-48fc-890b-61a5614ee69a
+
+localResources:
+  specs:
+    - ..\hestia-api.yaml
