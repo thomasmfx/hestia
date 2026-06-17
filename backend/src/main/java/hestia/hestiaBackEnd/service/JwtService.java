@@ -1,6 +1,6 @@
 package hestia.hestiaBackEnd.service;
 
-import hestia.hestiaBackEnd.entity.Hospede;
+import hestia.hestiaBackEnd.domain.Hospede;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

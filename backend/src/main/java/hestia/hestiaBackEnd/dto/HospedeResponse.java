@@ -6,18 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class HospedeResponse {
-    UUID id;
+    Integer id;
     String nome;
     String cpf;
-    LocalDate dtaNascimento;
+    LocalDate dtNascimento;
     String email;
+    Boolean ativo;
+    Boolean aceitouTermos;
     TelefoneResponse telefone;
     EnderecoResponse endereco;
+    LocalDateTime dtCadastro;
+    LocalDateTime dtAlteracao;
 }
