@@ -1,0 +1,132 @@
+{
+  "info": {
+    "_postman_id": "b7e6c0a2-1f34-4c8a-9b2d-5e6f7a8b9c0d",
+    "name": "Hestia API",
+    "description": "Endpoints do backend Hestia (Spring Boot, porta 8080).\n\nFluxo recomendado (Run in order): 1. Cadastrar hóspede → 2. Login → 3. Meu perfil.\nO Login salva o JWT em {{token}} automaticamente, e o /hospedes/me usa esse token.\n\nVariáveis: baseUrl, cpf, senha, token. O padrão de cpf/senha aponta para um hóspede de teste já existente, então o Login funciona sozinho. Rodar a coleção inteira cria um hóspede novo (CPF aleatório) a cada execução.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "cpf", "value": "98765432100", "type": "string" },
+    { "key": "senha", "value": "Senha1234", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Cadastrar hóspede (POST /hospedes)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Gera um CPF novo (11 dígitos) a cada execução para evitar 409 (CPF já cadastrado).",
+              "let cpf = '';",
+              "for (let i = 0; i < 11; i++) { cpf += Math.floor(Math.random() * 10); }",
+              "pm.collectionVariables.set('cpf', cpf);",
+              "if (!pm.collectionVariables.get('senha')) { pm.collectionVariables.set('senha', 'Senha1234'); }"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 201', () => pm.response.to.have.status(201));",
+              "pm.test('retorna id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Hóspede Teste\",\n  \"cpf\": \"{{cpf}}\",\n  \"dtNascimento\": \"1990-05-20\",\n  \"email\": \"{{cpf}}@exemplo.com\",\n  \"senha\": \"{{senha}}\",\n  \"aceitouTermos\": true,\n  \"telefone\": { \"ddd\": \"11\", \"numero\": \"987654321\" },\n  \"endereco\": {\n    \"logradouro\": \"Av. Paulista\",\n    \"numero\": \"1578\",\n    \"complemento\": \"Ap 92\",\n    \"bairro\": \"Bela Vista\",\n    \"cep\": \"01310100\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"SP\"\n  }\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/hospedes", "host": ["{{baseUrl}}"], "path": ["hospedes"] },
+        "description": "Cria um hóspede. O pre-request gera um CPF aleatório de 11 dígitos para não colidir (409). Retorna 201 com o HospedeResponse."
+      }
+    },
+    {
+      "name": "2. Login (POST /auth/login)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "if (json && json.token) {",
+              "  pm.collectionVariables.set('token', json.token);",
+              "  console.log('Token salvo em {{token}}.');",
+              "}",
+              "pm.test('retorna token', () => pm.expect(json).to.have.property('token'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"{{cpf}}\",\n  \"senha\": \"{{senha}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "Autentica por CPF + senha e devolve { token, tipo }. O token é salvo automaticamente em {{token}} pelo script de teste."
+      }
+    },
+    {
+      "name": "3. Meu perfil (GET /hospedes/me)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('retorna o hóspede', () => pm.expect(pm.response.json()).to.have.property('cpf'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{baseUrl}}/hospedes/me", "host": ["{{baseUrl}}"], "path": ["hospedes", "me"] },
+        "description": "Perfil do hóspede autenticado. Requer Authorization: Bearer {{token}} (preenchido pelo Login). Sem token retorna 403."
+      }
+    },
+    {
+      "name": "Login inválido (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cpf\": \"00000000000\",\n  \"senha\": \"errada\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+        "description": "Credenciais inválidas — deve retornar 401."
+      }
+    }
+  ]
+}
