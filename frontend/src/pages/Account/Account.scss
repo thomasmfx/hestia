@@ -1,0 +1,271 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.account {
+  width: 100%;
+  background-color: $color-white;
+}
+
+.account__container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: $space-2xl 48px;
+}
+
+// ─── Saudação ────────────────────────────────────────────────────────────
+.account__greeting {
+  margin-bottom: $space-xl;
+}
+
+.account__greeting-title {
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.1;
+  color: $color-text-primary;
+}
+
+.account__greeting-subtitle {
+  margin-top: $space-sm;
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  color: $color-text-secondary;
+}
+
+// ─── Cartões ─────────────────────────────────────────────────────────────
+.account__card {
+  @include card;
+  padding: $space-lg;
+}
+
+.account__next-stay {
+  margin-bottom: $space-lg;
+  background-color: $color-surface;
+  border: none;
+  box-shadow: none;
+}
+
+.account__card-eyebrow {
+  @include font-label;
+  display: block;
+  margin-bottom: $space-md;
+  color: $color-text-secondary;
+}
+
+.account__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-md;
+}
+
+.account__card-title {
+  @include font-h3;
+  color: $color-text-primary;
+}
+
+.account__link-action {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  font-weight: 600;
+  color: $color-primary;
+  cursor: pointer;
+  transition: color $transition-base;
+
+  &:hover:not(:disabled) {
+    color: $color-primary-dark;
+  }
+
+  &:disabled {
+    color: $color-text-secondary;
+    cursor: default;
+  }
+}
+
+// ─── Colunas ─────────────────────────────────────────────────────────────
+.account__columns {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: start;
+  gap: $space-lg;
+}
+
+.account__column {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+// ─── Dados pessoais ──────────────────────────────────────────────────────
+.account__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-lg;
+  margin: 0;
+}
+
+.account__field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.account__field-label {
+  @include font-label;
+  color: $color-text-secondary;
+}
+
+.account__field-value {
+  margin: 0;
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  color: $color-text-primary;
+}
+
+.account__password-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $space-lg;
+  padding-top: $space-lg;
+  border-top: 1px solid $color-border;
+}
+
+.account__password-label {
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  color: $color-text-secondary;
+}
+
+// ─── CTA (empty states) ──────────────────────────────────────────────────
+.account__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: 10px 22px;
+  border: none;
+  border-radius: $radius-md;
+  background-color: $color-primary;
+  color: $color-white;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color $transition-base;
+
+  &:hover:not(:disabled) {
+    background-color: $color-primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: $color-primary;
+    border: 1px solid $color-border;
+  }
+}
+
+// ─── Erro ────────────────────────────────────────────────────────────────
+.account__error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $space-md;
+  color: $color-text-secondary;
+  font-family: $font-body;
+}
+
+// ─── Empty state ─────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-sm;
+  padding: $space-lg 0;
+}
+
+.empty-state__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: $space-xs;
+  border-radius: 50%;
+  background-color: $color-hover-tint;
+  color: $color-primary;
+}
+
+.empty-state__title {
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  font-weight: 600;
+  color: $color-text-primary;
+}
+
+.empty-state__description {
+  max-width: 360px;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  line-height: 1.5;
+  color: $color-text-secondary;
+}
+
+.empty-state__action {
+  margin-top: $space-sm;
+}
+
+// ─── Skeleton (loading) ──────────────────────────────────────────────────
+.account__skeleton {
+  display: inline-block;
+  background-color: $color-border;
+  border-radius: $radius-sm;
+  animation: accountPulse 1.2s ease-in-out infinite;
+}
+
+.account__skeleton--name {
+  width: 180px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.account__skeleton--label {
+  width: 84px;
+  height: 12px;
+}
+
+.account__skeleton--value {
+  width: 100%;
+  max-width: 220px;
+  height: 16px;
+  margin-top: $space-xs;
+}
+
+@keyframes accountPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account__skeleton {
+    animation: none;
+  }
+}
