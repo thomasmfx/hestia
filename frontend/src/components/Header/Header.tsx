@@ -50,10 +50,7 @@ export default function Header() {
     <header className="header">
       <Logo />
       <nav className="header__nav">
-        <Link
-          className={`header__nav-link ${activeClass('/quartos')}`}
-          to="/"
-        >
+        <Link className={`header__nav-link ${activeClass('/quartos')}`} to="/">
           Quartos
         </Link>
         <Link
@@ -62,10 +59,7 @@ export default function Header() {
         >
           Comodidades
         </Link>
-        <Link
-          className={`header__nav-link ${activeClass('/sobre')}`}
-          to="/"
-        >
+        <Link className={`header__nav-link ${activeClass('/sobre')}`} to="/">
           Sobre
         </Link>
       </nav>

@@ -5,9 +5,6 @@ import hestia.hestiaBackEnd.domain.Hospede;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/**
- * RNF0112 - aplica hash + salt (BCrypt) na senha antes da persistência.
- */
 @Component
 public class CriptografarSenha implements IStrategy {
 

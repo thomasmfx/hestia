@@ -90,8 +90,6 @@ public class ControllerHospede {
         return ResponseEntity.noContent().build();
     }
 
-    // ----- helpers -----
-
     private Hospede carregarAutenticado(Authentication authentication) {
         Integer id = Integer.parseInt(authentication.getName());
         Hospede filtro = new Hospede();

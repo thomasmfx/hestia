@@ -41,7 +41,6 @@ public class HospedeDAO implements IDAO {
 
     @Override
     public void excluir(EntidadeDominio entidade) {
-        // soft delete: a strategy Inativar já marcou ativo=false; aqui apenas persistimos a alteração.
         Hospede hospede = (Hospede) entidade;
         Hospede gerenciado = em.merge(hospede);
         em.flush();

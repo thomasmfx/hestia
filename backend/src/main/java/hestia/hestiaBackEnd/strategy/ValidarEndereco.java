@@ -5,9 +5,6 @@ import hestia.hestiaBackEnd.domain.EntidadeDominio;
 import hestia.hestiaBackEnd.domain.Hospede;
 import org.springframework.stereotype.Component;
 
-/**
- * Valida os campos obrigatórios do endereço do hóspede.
- */
 @Component
 public class ValidarEndereco implements IStrategy {
 

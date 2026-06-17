@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
-/**
- * RN0211 - valida o formato do e-mail do hóspede.
- */
 @Component
 public class ValidarEmail implements IStrategy {
 

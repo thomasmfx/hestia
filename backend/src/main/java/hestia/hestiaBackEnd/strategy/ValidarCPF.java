@@ -5,9 +5,6 @@ import hestia.hestiaBackEnd.domain.EntidadeDominio;
 import hestia.hestiaBackEnd.domain.Hospede;
 import org.springframework.stereotype.Component;
 
-/**
- * RN0202 / RN0211 - valida o formato/dígitos verificadores do CPF e garante a unicidade.
- */
 @Component
 public class ValidarCPF implements IStrategy {
 

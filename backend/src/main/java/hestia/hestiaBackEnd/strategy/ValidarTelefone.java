@@ -5,9 +5,6 @@ import hestia.hestiaBackEnd.domain.Hospede;
 import hestia.hestiaBackEnd.domain.Telefone;
 import org.springframework.stereotype.Component;
 
-/**
- * Valida o formato do telefone do hóspede.
- */
 @Component
 public class ValidarTelefone implements IStrategy {
 

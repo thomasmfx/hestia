@@ -112,7 +112,9 @@ export default function SignupForm({ onSuccess, onSwitch }: SignupFormProps) {
       onSuccess(token);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Não foi possível concluir o cadastro.',
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível concluir o cadastro.',
       );
       setSubmitting(false);
     }
@@ -218,7 +220,12 @@ export default function SignupForm({ onSuccess, onSwitch }: SignupFormProps) {
                 label="Estado (UF)"
                 value={estado}
                 onChange={(v) =>
-                  setEstado(v.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 2))
+                  setEstado(
+                    v
+                      .toUpperCase()
+                      .replace(/[^A-Z]/g, '')
+                      .slice(0, 2),
+                  )
                 }
                 placeholder="SP"
               />

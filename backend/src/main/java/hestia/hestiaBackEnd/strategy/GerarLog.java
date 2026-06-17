@@ -5,9 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/**
- * RNF0131 - registra a operação para auditoria. Nunca interrompe o fluxo (retorna sempre null).
- */
 @Component
 public class GerarLog implements IStrategy {
 

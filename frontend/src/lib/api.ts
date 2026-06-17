@@ -12,12 +12,13 @@ export class UnauthorizedError extends Error {
   }
 }
 
-// Extrai a mensagem de erro do backend (campo "message"), com fallback.
+// Extrai a mensagem de erro do backend (campo "mensagem" do contrato), com fallback.
 async function readError(res: Response, fallback: string): Promise<string> {
   try {
-    const body = (await res.json()) as { message?: string };
-    if (typeof body.message === 'string' && body.message.trim()) {
-      return body.message;
+    const body = (await res.json()) as { mensagem?: string; message?: string };
+    const msg = body.mensagem ?? body.message;
+    if (typeof msg === 'string' && msg.trim()) {
+      return msg;
     }
   } catch {
     // corpo vazio ou não-JSON
@@ -34,13 +35,18 @@ export async function getMe(): Promise<Hospede> {
   // significa token ausente/inválido → tratamos como sessão expirada.
   if (res.status === 401 || res.status === 403) throw new UnauthorizedError();
   if (!res.ok) {
-    throw new Error(await readError(res, 'Não foi possível carregar seu perfil.'));
+    throw new Error(
+      await readError(res, 'Não foi possível carregar seu perfil.'),
+    );
   }
   return (await res.json()) as Hospede;
 }
 
 // Login por CPF + senha. POST /auth/login -> { token, tipo }.
-export async function login(cpf: string, senha: string): Promise<LoginResponse> {
+export async function login(
+  cpf: string,
+  senha: string,
+): Promise<LoginResponse> {
   const res = await fetch('/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -62,10 +68,9 @@ export async function cadastrar(
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
-    // O backend não inclui "message" por padrão; damos fallbacks por status.
+    // Usa a "mensagem" do backend; o fallback só vale se o corpo vier vazio.
     let fallback = 'Não foi possível concluir o cadastro. Verifique os dados.';
     if (res.status === 409) fallback = 'Este CPF já está cadastrado.';
-    else if (res.status === 422) fallback = 'É necessário aceitar os termos de uso.';
     throw new Error(await readError(res, fallback));
   }
   return (await res.json()) as Hospede;

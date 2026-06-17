@@ -4,9 +4,6 @@ import hestia.hestiaBackEnd.domain.EntidadeDominio;
 import hestia.hestiaBackEnd.domain.Hospede;
 import org.springframework.stereotype.Component;
 
-/**
- * RN0201 - valida os campos obrigatórios do hóspede e o aceite dos termos de uso.
- */
 @Component
 public class ValidarDadosHospede implements IStrategy {
 
