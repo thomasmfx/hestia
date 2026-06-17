@@ -21,8 +21,7 @@
 
 .input-date__input {
   field-sizing: content; // encolhe o campo até o texto da data (Chromium 123+)
-  padding: 0.5em;
-  padding-right: 30px;
+  padding-inline: 0.5em;
   border: 1px solid $color-border;
   border-radius: $radius-md;
   font-size: $fs-body-m;

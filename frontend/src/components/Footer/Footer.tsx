@@ -18,13 +18,13 @@ export default function Footer() {
 
       <div className="footer__content">
         <h3 className="footer__content-title">EXPLORAR</h3>
-        <Link className="footer__content-link" to="/quartos">
+        <Link className="footer__content-link" to="/">
           Quartos
         </Link>
-        <Link className="footer__content-link" to="/comodidades">
+        <Link className="footer__content-link" to="/">
           Comodidades
         </Link>
-        <Link className="footer__content-link" to="/sobre">
+        <Link className="footer__content-link" to="/">
           Sobre
         </Link>
       </div>
