@@ -1,11 +1,6 @@
 package hestia.hestiaBackEnd.service;
 
-import hestia.hestiaBackEnd.dto.LoginRequest;
-import hestia.hestiaBackEnd.dto.LoginResponse;
-import hestia.hestiaBackEnd.dto.CadastrarHospedeRequest;
-import hestia.hestiaBackEnd.dto.EnderecoResponse;
-import hestia.hestiaBackEnd.dto.HospedeResponse;
-import hestia.hestiaBackEnd.dto.TelefoneResponse;
+import hestia.hestiaBackEnd.dto.*;
 import hestia.hestiaBackEnd.entity.Hospede;
 import hestia.hestiaBackEnd.entity.StatusHospede;
 import hestia.hestiaBackEnd.repository.HospedeRepository;
@@ -120,6 +115,49 @@ public class HospedeService {
                 hospede.getCpf(),
                 hospede.getDataNascimento(),
                 hospede.getEmail(),
+                telefoneResponse,
+                enderecoResponse
+        );
+    }
+
+    public HospedeResponse atualizar(java.util.UUID id, AtualizarHospedeRequest request) {
+        Hospede hospede = hospedeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóspede não encontrado."));
+
+        hospede.setNome(request.getNome());
+        hospede.setDataNascimento(request.getDtNascimento());
+        hospede.setEmail(request.getEmail());
+        hospede.setDdd(request.getTelefone().getDdd());
+        hospede.setTelefone(request.getTelefone().getNumero());
+        hospede.setLogradouro(request.getEndereco().getLogradouro());
+        hospede.setNumero(request.getEndereco().getNumero());
+        hospede.setComplemento(request.getEndereco().getComplemento());
+        hospede.setBairro(request.getEndereco().getBairro());
+        hospede.setCep(request.getEndereco().getCep());
+        hospede.setCidade(request.getEndereco().getCidade());
+        hospede.setEstado(request.getEndereco().getEstado());
+
+        Hospede hospedeAtualizado = hospedeRepository.save(hospede);
+
+        TelefoneResponse telefoneResponse = new TelefoneResponse();
+        telefoneResponse.setDdd(hospedeAtualizado.getDdd());
+        telefoneResponse.setNumero(hospedeAtualizado.getTelefone());
+
+        EnderecoResponse enderecoResponse = new EnderecoResponse();
+        enderecoResponse.setLogradouro(hospedeAtualizado.getLogradouro());
+        enderecoResponse.setNumero(hospedeAtualizado.getNumero());
+        enderecoResponse.setComplemento(hospedeAtualizado.getComplemento());
+        enderecoResponse.setBairro(hospedeAtualizado.getBairro());
+        enderecoResponse.setCep(hospedeAtualizado.getCep());
+        enderecoResponse.setCidade(hospedeAtualizado.getCidade());
+        enderecoResponse.setEstado(hospedeAtualizado.getEstado());
+
+        return new HospedeResponse(
+                hospedeAtualizado.getId(),
+                hospedeAtualizado.getNome(),
+                hospedeAtualizado.getCpf(),
+                hospedeAtualizado.getDataNascimento(),
+                hospedeAtualizado.getEmail(),
                 telefoneResponse,
                 enderecoResponse
         );
