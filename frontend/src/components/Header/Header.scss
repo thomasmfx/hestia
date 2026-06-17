@@ -28,3 +28,133 @@
     color: $color-primary;
   }
 }
+
+// ─── Conta (estado logado) ──────────────────────────────────────────────
+.header__account {
+  position: relative;
+}
+
+.header__account-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-sm;
+  padding: 4px 8px 4px 4px;
+  background: none;
+  border: none;
+  border-radius: 99px;
+  cursor: pointer;
+  font-family: $font-body;
+  color: $color-text-primary;
+  transition: background-color $transition-base;
+
+  &:hover {
+    background-color: $color-surface;
+  }
+
+  &[aria-expanded='true'] .header__chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.header__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: $color-hover-tint;
+  color: $color-primary;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.header__account-name {
+  font-weight: 600;
+}
+
+.header__chevron {
+  color: $color-text-secondary;
+  transition: transform $transition-base;
+}
+
+.header__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 244px;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 200;
+  animation: headerMenuRise $transition-fast;
+}
+
+.header__menu-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $space-md;
+  border-bottom: 1px solid $color-border;
+}
+
+.header__menu-name {
+  font-weight: 700;
+  color: $color-text-primary;
+}
+
+.header__menu-email {
+  font-size: $fs-body-m;
+  color: $color-text-secondary;
+}
+
+.header__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px $space-md;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  font-weight: 500;
+  color: $color-text-primary;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color $transition-base;
+
+  &:hover {
+    background-color: $color-surface;
+  }
+
+  &--danger {
+    color: $color-primary;
+    border-top: 1px solid $color-border;
+  }
+}
+
+@keyframes headerMenuRise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__menu {
+    animation: none;
+  }
+
+  .header__chevron {
+    transition: none;
+  }
+}
