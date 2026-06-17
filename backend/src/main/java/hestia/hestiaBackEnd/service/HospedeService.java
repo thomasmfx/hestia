@@ -2,7 +2,6 @@ package hestia.hestiaBackEnd.service;
 
 import hestia.hestiaBackEnd.dto.LoginRequest;
 import hestia.hestiaBackEnd.dto.LoginResponse;
-import hestia.hestiaBackEnd.service.JwtService;
 import hestia.hestiaBackEnd.dto.CadastrarHospedeRequest;
 import hestia.hestiaBackEnd.dto.EnderecoResponse;
 import hestia.hestiaBackEnd.dto.HospedeResponse;
@@ -96,5 +95,33 @@ public class HospedeService {
 
         String token = jwtService.gerarToken(hospede);
         return new LoginResponse(token, "Bearer");
+    }
+
+    public HospedeResponse buscarPorId(java.util.UUID id) {
+        Hospede hospede = hospedeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóspede não encontrado."));
+
+        TelefoneResponse telefoneResponse = new TelefoneResponse();
+        telefoneResponse.setDdd(hospede.getDdd());
+        telefoneResponse.setNumero(hospede.getTelefone());
+
+        EnderecoResponse enderecoResponse = new EnderecoResponse();
+        enderecoResponse.setLogradouro(hospede.getLogradouro());
+        enderecoResponse.setNumero(hospede.getNumero());
+        enderecoResponse.setComplemento(hospede.getComplemento());
+        enderecoResponse.setBairro(hospede.getBairro());
+        enderecoResponse.setCep(hospede.getCep());
+        enderecoResponse.setCidade(hospede.getCidade());
+        enderecoResponse.setEstado(hospede.getEstado());
+
+        return new HospedeResponse(
+                hospede.getId(),
+                hospede.getNome(),
+                hospede.getCpf(),
+                hospede.getDataNascimento(),
+                hospede.getEmail(),
+                telefoneResponse,
+                enderecoResponse
+        );
     }
 }
