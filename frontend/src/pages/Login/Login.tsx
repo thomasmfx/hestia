@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check } from 'react-feather';
-import { setSession } from '../../lib/session';
+import { setSession, setToken } from '../../lib/session';
+import { getMe } from '../../lib/api';
 import SignupForm from './SignupForm';
 import LoginForm from './LoginForm';
 import './Login.scss';
@@ -14,11 +15,18 @@ export default function Login() {
   const [mode, setMode] = useState<Mode>('login');
   const [leaving, setLeaving] = useState(false);
 
-  // Sessão simulada + cross-fade de 300ms antes de ir para a conta.
-  function completeAuth(session: { nome?: string; email: string }) {
-    setSession(session);
+  // Recebe o token (login ou cadastro), carrega o perfil para o header
+  // e faz o cross-fade de 300ms antes de ir para a conta.
+  async function completeAuth(token: string) {
+    setToken(token);
+    try {
+      const me = await getMe();
+      setSession({ nome: me.nome, email: me.email });
+    } catch {
+      // O perfil recarrega na própria página da conta, se necessário.
+    }
     setLeaving(true);
-    setTimeout(() => navigate('/profile'), 300);
+    setTimeout(() => navigate('/account'), 300);
   }
 
   return (
@@ -45,9 +53,9 @@ export default function Login() {
         </div>
         <div className="login__overlay login__overlay--login">
           <h2 className="login__overlay-title">
-            Bem-vindo de volta
+            O bom filho à
             <br />
-            ao seu refúgio.
+            casa torna.
           </h2>
           <ul className="login__benefits login__benefits--login">
             <li>

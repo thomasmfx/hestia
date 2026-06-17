@@ -1,26 +1,37 @@
 import { useState } from 'react';
 import TextField from '../../components/TextField/TextField';
 import PasswordField from '../../components/PasswordField/PasswordField';
-import { isEmailValid } from '../../lib/validation';
+import { isCpfValid, maskCpf } from '../../lib/validation';
+import { login } from '../../lib/api';
 import './AuthForm.scss';
 
 interface LoginFormProps {
-  onSuccess: (data: { email: string }) => void;
+  onSuccess: (token: string) => void;
   onSwitch: () => void;
 }
 
 export default function LoginForm({ onSuccess, onSwitch }: LoginFormProps) {
-  const [email, setEmail] = useState('');
+  const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const canSubmit = isEmailValid(email) && senha.trim() !== '';
+  const canSubmit = isCpfValid(cpf) && senha.trim() !== '' && !submitting;
 
   const preventNav = (e: React.SyntheticEvent) => e.preventDefault();
 
-  function handleSubmit(e: React.SyntheticEvent) {
+  async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-    onSuccess({ email });
+    setSubmitting(true);
+    setError('');
+    try {
+      const { token } = await login(cpf.replace(/\D/g, ''), senha);
+      onSuccess(token);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Não foi possível entrar.');
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -31,12 +42,12 @@ export default function LoginForm({ onSuccess, onSwitch }: LoginFormProps) {
       </p>
 
       <TextField
-        label="E-mail"
-        type="email"
-        value={email}
-        onChange={setEmail}
-        placeholder="marina@exemplo.com"
-        autoComplete="email"
+        label="CPF"
+        value={cpf}
+        onChange={(v) => setCpf(maskCpf(v))}
+        placeholder="123.456.789-09"
+        autoComplete="username"
+        name="cpf"
       />
 
       <PasswordField
@@ -50,8 +61,10 @@ export default function LoginForm({ onSuccess, onSwitch }: LoginFormProps) {
         Esqueci minha senha
       </a>
 
+      {error && <p className="auth-form__error">{error}</p>}
+
       <button type="submit" className="auth-form__submit" disabled={!canSubmit}>
-        Entrar
+        {submitting ? 'Entrando…' : 'Entrar'}
       </button>
 
       <p className="auth-form__switch">

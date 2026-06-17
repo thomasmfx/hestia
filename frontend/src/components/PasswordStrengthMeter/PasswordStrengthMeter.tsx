@@ -1,4 +1,4 @@
-import { getPasswordStrength } from '../../lib/password';
+import { getPasswordStrength } from '../../lib/validation';
 import './PasswordStrengthMeter.scss';
 
 // Rótulo + cor por nível de força (amber #b7791f → verde #2d6a4f).

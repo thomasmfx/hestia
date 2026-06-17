@@ -14,13 +14,134 @@
   margin-bottom: $space-xl;
 }
 
+.auth-form__error {
+  margin-bottom: $space-md;
+  padding: 10px 14px;
+  border-radius: $radius-md;
+  background-color: $color-hover-tint;
+  color: $color-primary-dark;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+}
+
+.auth-form__section {
+  @include font-label;
+  display: block;
+  margin: $space-sm 0 $space-md;
+  color: $color-text-secondary;
+}
+
+// ─── Wizard (cadastro em etapas) ────────────────────────────────────────
+.auth-form__steps {
+  display: flex;
+  gap: $space-sm;
+  margin-bottom: $space-sm;
+}
+
+.auth-form__step-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background-color: $color-border;
+  transition: background-color $transition-base;
+
+  &--active {
+    background-color: $color-primary;
+  }
+}
+
+.auth-form__step-label {
+  margin-bottom: $space-xl;
+  font-family: $font-body;
+  font-size: $fs-body-m;
+  color: $color-text-secondary;
+}
+
+.auth-form__step {
+  animation: authStepFade 250ms ease;
+}
+
+.auth-form__actions {
+  display: flex;
+  gap: $space-md;
+
+  .auth-form__submit {
+    flex: 1;
+    width: auto;
+  }
+}
+
+.auth-form__back {
+  height: 52px;
+  padding: 0 $space-lg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background-color: $color-white;
+  color: $color-text-primary;
+  font-family: $font-body;
+  font-size: $fs-body-l;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color $transition-base,
+    color $transition-base;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+@keyframes authStepFade {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-form__step {
+    animation: none;
+  }
+}
+
 .auth-form__row {
   display: flex;
   gap: $space-md;
 
-  .text-field {
+  .text-field,
+  .input-date {
     flex: 1;
     min-width: 0;
+  }
+}
+
+// O InputDate compartilhado é compacto por padrão (field-sizing: content,
+// pensado para a barra de busca da Home). No formulário ele ocupa a largura
+// toda e casa com a altura/padding dos demais campos.
+.auth-form .input-date {
+  gap: $space-xs;
+}
+
+.auth-form .input-date__control {
+  width: 100%;
+}
+
+.auth-form .input-date__input {
+  width: 100%;
+  height: 48px;
+  field-sizing: normal;
+  padding: 0 30px 0 $space-md;
+  font-size: $fs-body-l;
+  color: $color-text-primary;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
   }
 }
 
